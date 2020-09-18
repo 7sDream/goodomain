@@ -2,6 +2,8 @@ mod data;
 mod args;
 
 fn main() {
+    assert_eq!(data::TLD_COUNT, data::TLD_LIST.len());
+
     let mut args = args::get();
 
     if args.version {
