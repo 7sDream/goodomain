@@ -1,0 +1,15 @@
+[package]
+name = "goodomain"
+version = "0.1.0"
+authors = ["7sDream <i@7sdre.am>"]
+description = "find good domain from your favorite word"
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+structopt = "0.3"
+once_cell = "1"
+
+[build-dependencies]
+ureq = { version = "1", default_features = false, features = ["tls"] }
+punycode = "0.4"
