@@ -5,9 +5,9 @@ A tiny toy to find good domain from your favorite word.
 ## Usage
 
 ```bash
-$ git clone https://github.com/7sdream/goodmain
+$ git clone https://github.com/7sdream/goodomain
 $ cd goodomain
-$ cargo run --release -- <your world>
+$ cargo run --release -- <your word>
 ```
 
 ## Example
