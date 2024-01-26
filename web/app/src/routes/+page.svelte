@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
 
-	import { Button, buttonVariants } from '$lib/components/ui/button';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input';
 	import { cn } from '$lib/utils';
 
 	import DarkModeSwitchButton from '$lib/components/DarkModeSwitchButton.svelte';
+	import DomainList from '$lib/components/DomainList.svelte';
 	import TldSearchList from '$lib/components/TLDSearchList.svelte';
 
 	import * as goodomain from 'goodomain-wasm';
@@ -37,7 +37,7 @@
 		}
 	}
 
-	const handleClick = (_event: MouseEvent, tld: goodomain.TLDInWord) => {
+	const handleClick = (tld: goodomain.TLDInWord) => {
 		window.open(`https://www.iana.org/whois?q=${encodeURIComponent(tld.tld)}`, '_blank');
 	};
 </script>
@@ -51,14 +51,14 @@
 		<DarkModeSwitchButton />
 	</div>
 	<div class="fixed bottom-0 right-0 m-4">
-		Data Version: {tldVersion}, see
+		Data version: {tldVersion}, see
 		<Dialog.Root closeOnOutsideClick={false}>
 			<Dialog.Trigger class={cn(buttonVariants({ variant: 'outline' }), 'px-1', 'py-0', 'h-auto')}
 				>all TLDs</Dialog.Trigger
 			>
 			<Dialog.Content>
 				<Dialog.Header>
-					<Dialog.Title>All TLDs in {tldVersion}:</Dialog.Title>
+					<Dialog.Title>All TLDs in version {tldVersion}:</Dialog.Title>
 				</Dialog.Header>
 				<TldSearchList />
 			</Dialog.Content>
@@ -82,21 +82,7 @@
 						No TLD in this word, try another word or continue typing...
 					</p>
 				{/if}
-				{#if result.length > 0}
-					<ul
-						class="flex w-full flex-col items-center space-y-4 overflow-y-auto overflow-x-hidden p-2 text-lg"
-					>
-						{#each result as tld (tld.domain)}
-							<li transition:fly={{ x: 200, duration: 200 }}>
-								<Button
-									variant="outline"
-									class="h-auto px-1 py-0 text-lg"
-									on:click={(e) => handleClick(e, tld)}>{tld.domain}</Button
-								><span>{tld.path}</span>
-							</li>
-						{/each}
-					</ul>
-				{/if}
+				<DomainList {result} on:domainClick={(ev) => handleClick(ev.detail)} />
 			{/if}
 		</div>
 	</div>
