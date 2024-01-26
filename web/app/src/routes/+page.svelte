@@ -13,7 +13,6 @@
 
 	import * as goodomain from 'goodomain-wasm';
 
-	const tldCount = goodomain.tld_count();
 	const tldVersion = goodomain.tld_version();
 
 	let word = '';
@@ -38,7 +37,7 @@
 		}
 	}
 
-	const handleClick = (event: MouseEvent, tld: goodomain.TLDInWord) => {
+	const handleClick = (_event: MouseEvent, tld: goodomain.TLDInWord) => {
 		window.open(`https://www.iana.org/whois?q=${encodeURIComponent(tld.tld)}`, '_blank');
 	};
 </script>
@@ -52,7 +51,7 @@
 		<DarkModeSwitchButton />
 	</div>
 	<div class="fixed bottom-0 right-0 m-4">
-		Version: {tldVersion}, see
+		Data Version: {tldVersion}, see
 		<Dialog.Root closeOnOutsideClick={false}>
 			<Dialog.Trigger class={cn(buttonVariants({ variant: 'outline' }), 'px-1', 'py-0', 'h-auto')}
 				>all TLDs</Dialog.Trigger

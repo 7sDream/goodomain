@@ -4,7 +4,7 @@ A tiny toy to find good domain from your favorite word.
 
 ## Web App
 
-<https://7sdream.github.io/goodomain>
+Check [GitHub Page](https://7sdream.github.io/goodomain/?q=7sDream) of this project.
 
 Source code in `web/app`.
 
