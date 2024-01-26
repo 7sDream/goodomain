@@ -50,24 +50,10 @@
 	<div class="fixed right-0 top-0 m-4">
 		<DarkModeSwitchButton />
 	</div>
-	<div class="fixed bottom-0 right-0 m-4">
-		Data version: {tldVersion}, see
-		<Dialog.Root closeOnOutsideClick={false}>
-			<Dialog.Trigger class={cn(buttonVariants({ variant: 'outline' }), 'px-1', 'py-0', 'h-auto')}
-				>all TLDs</Dialog.Trigger
-			>
-			<Dialog.Content>
-				<Dialog.Header>
-					<Dialog.Title>All TLDs in version {tldVersion}:</Dialog.Title>
-				</Dialog.Header>
-				<TldSearchList />
-			</Dialog.Content>
-		</Dialog.Root>.
-	</div>
-	<div class="flex h-screen w-full flex-col place-items-center">
+	<div class="flex h-screen w-full flex-col place-items-center space-y-4">
 		<div class="h-1/4"></div>
-		<h1 class="mb-2 text-4xl font-extrabold">Find Your Good Domain</h1>
-		<div class="flex h-3/4 w-3/4 flex-col items-center space-y-2 md:w-1/2">
+		<h1 class="text-4xl font-extrabold">Goodomain</h1>
+		<div class="flex h-3/4 w-3/4 flex-col items-center space-y-4 md:w-1/2">
 			<Input
 				class="text-lg shadow-lg"
 				type="search"
@@ -85,5 +71,19 @@
 				<DomainList {result} on:domainClick={(ev) => handleClick(ev.detail)} />
 			{/if}
 		</div>
+	</div>
+	<div class="fixed bottom-0 right-0 m-4">
+		Data version: {tldVersion}, see
+		<Dialog.Root closeOnOutsideClick={false}>
+			<Dialog.Trigger class={cn(buttonVariants({ variant: 'outline' }), 'px-1', 'py-0', 'h-auto')}
+				>all TLDs</Dialog.Trigger
+			>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>All TLDs in version {tldVersion}:</Dialog.Title>
+				</Dialog.Header>
+				<TldSearchList />
+			</Dialog.Content>
+		</Dialog.Root>.
 	</div>
 </div>
