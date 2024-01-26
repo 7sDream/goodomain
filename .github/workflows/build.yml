@@ -2,12 +2,16 @@ name: Build
 on:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      matrix_os:
+        type: string
+        default: '["windows-latest", "ubuntu-latest", "macos-latest"]'
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest", "ubuntu-20.04", "macos-11"]
+        os: ${{ fromJSON(inputs.matrix_os) }}
     name: Build for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:

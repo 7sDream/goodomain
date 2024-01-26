@@ -14,11 +14,8 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 jobs:
-  build-lib:
-    uses: ./.github/workflows/build.yml
-  build-webapp:
-    needs: [build-lib]
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,15 +47,15 @@ jobs:
         env:
           BASE_PATH: /goodomain
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: web/app/build
   deploy:
-    needs: [build-webapp]
+    needs: [build]
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
