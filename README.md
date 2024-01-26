@@ -29,8 +29,8 @@ See `goodomain --help` for more options.
 
 ## As a Library
 
-Rust: See `crates/goodomain`
-NodeJS: See `bindings/goodomain-wasm`, the WebApp uses it.
+- Rust: See `crates/goodomain`
+- NodeJS: See `bindings/goodomain-wasm`, the WebApp uses it.
 
 ## LICENSE
 

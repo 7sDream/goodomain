@@ -6,6 +6,13 @@ on:
       - master
   schedule:
     - cron: "0 23 * * *" # CST 7:00 = UTC prev day 23:00
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 jobs:
   build-lib:
     uses: ./.github/workflows/build.yml
@@ -19,13 +26,6 @@ jobs:
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           target: wasm32-unknown-unknown
-      - name: Install wasm-pack
-        run: |
-          cargo install wasm-pack
-      - name: Build goodomain-wasm nodejs package
-        run: |
-          wasm-pack build bindings/goodomain-wasm
-          mv bindings/goodomain-wasm/pkg web
       - name: Install node toolchains
         uses: actions/setup-node@v4
         with:
@@ -33,6 +33,13 @@ jobs:
       - name: Install pnpm
         run: |
           npm install -g pnpm
+      - name: Install wasm-pack
+        run: |
+          pnpm install -g wasm-pack
+      - name: Build goodomain-wasm nodejs package
+        run: |
+          wasm-pack build bindings/goodomain-wasm --release
+          mv bindings/goodomain-wasm/pkg web
       - name: Build web app
         working-directory: web/app
         run: |
@@ -46,9 +53,6 @@ jobs:
           path: web/app/build
   deploy:
     needs: [build-webapp]
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
