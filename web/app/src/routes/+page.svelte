@@ -43,6 +43,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Goodomain - Find your good domain</title>
+</svelte:head>
+
 <div>
 	<div class="fixed right-0 top-0 m-4">
 		<DarkModeSwitchButton />
