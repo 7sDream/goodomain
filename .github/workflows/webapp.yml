@@ -31,8 +31,10 @@ jobs:
         with:
           version: lts
       - name: Install pnpm
-        run: |
-          npm install -g pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+          run_install: false
       - name: Install wasm-pack
         run: |
           pnpm install -g wasm-pack
