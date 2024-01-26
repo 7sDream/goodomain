@@ -1,0 +1,26 @@
+name: Style
+on:
+  workflow_dispatch:
+  workflow_call:
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Rust nightly toolchains
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+          components: rustfmt
+      - name: rustfmt check
+        uses: actions-rust-lang/rustfmt@v1
+      - name: Install Rust stable toolchains
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: clippy
+      - name: clippy check
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --workspace --all-targets --all-features

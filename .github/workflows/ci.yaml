@@ -1,0 +1,17 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  schedule:
+    - cron: "0 23 * * *" # CST 7:00 = UTC prev day 23:00
+jobs:
+  style:
+    uses: ./.github/workflows/style.yml
+  build:
+    needs: [style]
+    uses: ./.github/workflows/build.yml

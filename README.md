@@ -2,35 +2,36 @@
 
 A tiny toy to find good domain from your favorite word.
 
-## Usage
+## Web App
+
+<https://7sdream.github.io/goodomain>
+
+Source code in `web/app`.
+
+## CLI tool
+
+### Install from source
 
 ```bash
-$ git clone https://github.com/7sdream/goodomain
-$ cd goodomain
-$ cargo run --release -- <your word>
+cargo build --path ./crates/goodomain-cli
 ```
 
-## Example
+### Usage
 
 ```bash
-cargo run --release -- 7sdream
+$ goodomain 7sdream
 7.sd/ream
 7sd.re/am
 7sdre.am
 ```
 
-See `cargo run --release -- --help` for more options.
+See `goodomain --help` for more options.
 
-## TLD list file update
+## As a Library
 
-The `build.rs` will auto download the latest TLD list file and use it.
-
-But due to cargo limit, if no file changed, `build.rs` will do not be executed again.
-
-So if you want to update TLD list file, try `touch build.rs` and retry.
-
-You can use `--version` option to get current TLD list file version
+Rust: See `crates/goodomain`
+NodeJS: See `bindings/goodomain-wasm`, the WebApp uses it.
 
 ## LICENSE
 
-WTFPL.
+GPLv3, check `LICENSE.md`.

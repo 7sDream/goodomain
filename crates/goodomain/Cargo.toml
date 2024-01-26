@@ -1,0 +1,21 @@
+[package]
+name = "goodomain"
+build = "build.rs"
+authors = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+homepage = { workspace = true }
+repository = { workspace = true }
+readme = { workspace = true }
+license = { workspace = true }
+
+[dependencies]
+displaydoc = "0.2"
+once_cell = { version = "1", default-features = false, features = ["alloc"] }
+
+[build-dependencies]
+ureq = { version = "1", default_features = false, features = ["tls"] }
+punycode = "0.4"
+
+[lints]
+workspace = true

@@ -1,0 +1,19 @@
+[package]
+name = "goodomain-cli"
+description = "Find good domain from your favorite word"
+categories = ["command-line-utilities"]
+authors = { workspace = true }
+edition = { workspace = true }
+version = { workspace = true }
+homepage = { workspace = true }
+repository = { workspace = true }
+readme = { workspace = true }
+license = { workspace = true }
+
+[[bin]]
+name = "goodomain"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive", "unicode", "wrap_help"] }
+goodomain = { path = "../goodomain" }
