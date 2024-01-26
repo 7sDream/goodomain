@@ -87,10 +87,6 @@ impl TLDInWord {
 
 /// Find good TLDs for a `word` you like.
 pub fn find(word: &str) -> Result<impl Iterator<Item = TLDInWord> + '_, FindError> {
-    if word.is_empty() {
-        return Err(FindError::InvalidWord(StrParamError::Empty));
-    }
-
     let mut indices = Vec::new();
     for (index, c) in word.char_indices() {
         if c.is_control() || c == '.' || c == '/' {
@@ -113,10 +109,10 @@ pub fn find(word: &str) -> Result<impl Iterator<Item = TLDInWord> + '_, FindErro
 
 fn find_iter(word: &str, indices: &[usize], i: &mut usize, j: &mut usize) -> Option<TLDInWord> {
     loop {
-        if *j == indices.len() {
+        if *j >= indices.len() {
             *i += 1;
             *j = *i + 1;
-            if *j == indices.len() {
+            if *j >= indices.len() {
                 return None;
             }
         }

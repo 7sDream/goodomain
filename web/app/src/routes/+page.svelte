@@ -24,16 +24,11 @@
 	});
 
 	$: {
-		if (word.length === 0) {
-			result = [];
+		try {
+			result = goodomain.find(word);
 			error = null;
-		} else {
-			try {
-				result = goodomain.find(word);
-				error = null;
-			} catch (e: any) {
-				error = e;
-			}
+		} catch (e: any) {
+			error = e;
 		}
 	}
 
