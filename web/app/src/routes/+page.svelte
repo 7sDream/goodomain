@@ -14,6 +14,7 @@
 	import * as goodomain from 'goodomain-wasm';
 
 	const tldVersion = goodomain.tld_version();
+	const tldCount = goodomain.tld_count();
 
 	let word = '';
 	let result: goodomain.TLDInWord[] = [];
@@ -75,7 +76,7 @@
 			>
 			<Dialog.Content>
 				<Dialog.Header>
-					<Dialog.Title>All TLDs in version {tldVersion}:</Dialog.Title>
+					<Dialog.Title>{tldCount} TLDs in version {tldVersion}:</Dialog.Title>
 				</Dialog.Header>
 				<TldSearchList />
 			</Dialog.Content>
