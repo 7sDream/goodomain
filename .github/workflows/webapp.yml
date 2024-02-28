@@ -16,6 +16,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: github-pages
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,6 +40,11 @@ jobs:
         run: |
           wasm-pack build bindings/goodomain-wasm --release
           mv bindings/goodomain-wasm/pkg web
+      - name: Generate env file
+        uses: SpicyPizza/create-envfile@v2
+        with:
+          directory: web/app
+          envkey_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ vars.WEBAPP_GOOGLE_ANALYTICS_ID }}
       - name: Build web app
         working-directory: web/app
         run: |
