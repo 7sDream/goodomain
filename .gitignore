@@ -3,4 +3,3 @@
 /.vscode
 /target
 /web/pkg
-/web/pkg/.env
