@@ -10,7 +10,10 @@ use std::{
 const TLD_DATA_URL: &str = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
 
 fn download_tld_data() -> io::Result<String> {
-    ureq::get(TLD_DATA_URL).call().into_string()
+    ureq::get(TLD_DATA_URL)
+        .call()
+        .map_err(io::Error::other)?
+        .into_string()
 }
 
 struct TLDData {

@@ -10,12 +10,13 @@ readme = { workspace = true }
 license = { workspace = true }
 
 [dependencies]
-displaydoc = "0.2"
-once_cell = { version = "1", default-features = false, features = ["alloc"] }
+displaydoc = "0.2.4"
+once_cell = { version = "1.19", default-features = false, features = ["alloc"] }
+unicase = "2.7"
 
 [build-dependencies]
-ureq = { version = "1", default_features = false, features = ["tls"] }
-punycode = "0.4"
+ureq = { version = "2.9", default_features = false, features = ["tls"] }
+punycode = "0.4.1"
 
 [lints]
 workspace = true

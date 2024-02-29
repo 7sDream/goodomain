@@ -10,8 +10,11 @@ extern crate alloc;
 mod data;
 mod err;
 
-use alloc::{format, string::String, vec::Vec};
-use core::iter::Iterator;
+use alloc::{string::String, vec::Vec};
+use core::{
+    fmt::{Display, Formatter},
+    iter::Iterator,
+};
 
 pub use data::*;
 pub use err::*;
@@ -20,39 +23,46 @@ pub use err::*;
 /// and it's start..end index.
 #[repr(C)]
 #[derive(Debug)]
-pub struct TLDInWord {
+pub struct TLDInWord<'a> {
+    /// The Word
+    pub word: &'a str,
     /// The byte index in provided word.
     pub index: (usize, usize),
-    /// The TLD.
-    pub tld: &'static str,
 }
 
-impl TLDInWord {
-    fn new(start: usize, end: usize, tld: &'static str) -> Self {
+impl<'a> TLDInWord<'a> {
+    /// This method is not pubic, because there are some requirements that arguments must follow:
+    ///
+    /// - start < end
+    /// - word.len() >= end
+    /// - `start` and `end` must at character boundary in `word`
+    fn new(word: &'a str, start: usize, end: usize) -> Self {
         Self {
+            word,
             index: (start, end),
-            tld,
         }
+    }
+
+    /// Get tld of this result.
+    pub fn tld(&self) -> &'a str {
+        let (start, end) = self.index;
+        &self.word[start..end]
     }
 
     /// Get domain of this result.
     ///
     /// if name is empty, will using `<any>` as a placeholder, e.g. `<any>.com`.
-    ///
-    /// ## Panic
-    ///
-    /// Same as [`display`][Self::display].
-    pub fn domain(&self, word: &str) -> String {
-        let (start, end) = self.index;
-        let mut domain = String::with_capacity(word.len() + 7);
+    pub fn domain(&self) -> String {
+        let (start, _end) = self.index;
+        let mut domain = String::with_capacity(self.word.len() + 7);
 
         if start == 0 {
             domain.push_str("<any>");
         } else {
-            domain.push_str(&word[..start]);
+            domain.push_str(&self.word[..start]);
         }
         domain.push('.');
-        domain.push_str(&word[start..end]);
+        domain.push_str(self.tld());
 
         domain
     }
@@ -60,33 +70,25 @@ impl TLDInWord {
     /// Get path of this result.
     ///
     /// if no path needed, will be empty string without `/`.
-    ///
-    /// ## Panic
-    ///
-    /// Same as [`display`][Self::display].
-    pub fn path(&self, word: &str) -> String {
+    pub fn path(&self) -> String {
         let (_start, end) = self.index;
-        let mut path = String::with_capacity(1 + &word[end..].len());
-        if end < word.len() {
+        let mut path = String::with_capacity(1 + &self.word[end..].len());
+        if end < self.word.len() {
             path.push('/');
-            path.push_str(&word[end..]);
+            path.push_str(&self.word[end..]);
         }
         path
     }
+}
 
-    /// Get full display string of this result. Equal to `domain` + `path`.
-    ///
-    /// ## Panic
-    ///
-    /// The `word` parameter should be the same string as you provided when get this `TLDInWord`
-    /// from [find] API. Otherwise this function at least gives incorrect result, and may panic.
-    pub fn display(&self, word: &str) -> String {
-        format!("{}{}", self.domain(word), self.path(word))
+impl<'a> Display for TLDInWord<'a> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+        f.write_fmt(format_args!("{}{}", self.domain(), self.path()))
     }
 }
 
 /// Find good TLDs for a `word` you like.
-pub fn find(word: &str) -> Result<impl Iterator<Item = TLDInWord> + '_, FindError> {
+pub fn find(word: &str) -> Result<impl Iterator<Item = TLDInWord<'_>>, FindError> {
     let mut indices = Vec::new();
     for (index, c) in word.char_indices() {
         if c.is_control() || c == '.' || c == '/' {
@@ -107,7 +109,9 @@ pub fn find(word: &str) -> Result<impl Iterator<Item = TLDInWord> + '_, FindErro
     }))
 }
 
-fn find_iter(word: &str, indices: &[usize], i: &mut usize, j: &mut usize) -> Option<TLDInWord> {
+fn find_iter<'s>(
+    word: &'s str, indices: &[usize], i: &mut usize, j: &mut usize,
+) -> Option<TLDInWord<'s>> {
     loop {
         if *j >= indices.len() {
             *i += 1;
@@ -119,8 +123,8 @@ fn find_iter(word: &str, indices: &[usize], i: &mut usize, j: &mut usize) -> Opt
         let (start, end) = (indices[*i], indices[*j]);
         *j += 1;
         let target = &word[start..end];
-        if let Some(tld) = is_tld(target) {
-            return Some(TLDInWord::new(start, end, tld));
+        if is_tld(target) {
+            return Some(TLDInWord::new(word, start, end));
         }
     }
 }

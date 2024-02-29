@@ -17,4 +17,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 goodomain = { path = "../../crates/goodomain" }
-wasm-bindgen = "0.2"
+wasm-bindgen = "0.2.91"

@@ -1,6 +1,7 @@
 use alloc::collections::BTreeSet;
 
 use once_cell::race::OnceBox;
+use unicase::Ascii;
 
 /// TLD data file version.
 ///
@@ -11,16 +12,14 @@ pub static TLD_VERSION: u64 = include!(concat!(env!("OUT_DIR"), "/tld_version.in
 pub static TLD_LIST: [&str; include!(concat!(env!("OUT_DIR"), "/tld_count.in"))] =
     include!(concat!(env!("OUT_DIR"), "/tld_list.in"));
 
-static TLD_SET: OnceBox<BTreeSet<&'static str>> = OnceBox::new();
+fn tld_set() -> &'static BTreeSet<Ascii<&'static str>> {
+    static TLD_SET: OnceBox<BTreeSet<Ascii<&str>>> = OnceBox::new();
+
+    TLD_SET
+        .get_or_init(|| alloc::boxed::Box::new(TLD_LIST.iter().copied().map(Ascii::new).collect()))
+}
 
 /// Checks if a string in invalid TLD.
-///
-/// If true, will return the TLD's static string.
-///
-/// Faster then iterate through the `TLD_LIST`.
-pub fn is_tld(text: &str) -> Option<&'static str> {
-    TLD_SET
-        .get_or_init(|| alloc::boxed::Box::new(TLD_LIST.iter().copied().collect()))
-        .get(text)
-        .copied()
+pub fn is_tld(text: &str) -> bool {
+    tld_set().contains(&Ascii::new(text))
 }

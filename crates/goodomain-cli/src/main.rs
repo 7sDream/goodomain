@@ -24,7 +24,7 @@ fn main() {
     match goodomain::find(&word) {
         Ok(tlds) => {
             for tld in tlds {
-                println!("{}", tld.display(&word));
+                println!("{}", tld);
             }
         }
         Err(e) => {

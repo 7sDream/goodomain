@@ -21,7 +21,7 @@ pub fn tld_list() -> Vec<String> {
 
 #[wasm_bindgen]
 pub fn is_tld(text: &str) -> bool {
-    goodomain::is_tld(text).is_some()
+    goodomain::is_tld(text)
 }
 
 #[wasm_bindgen]
@@ -39,15 +39,15 @@ pub struct TLDInWord {
 }
 
 impl TLDInWord {
-    pub fn new(word: &str, tld: &goodomain::TLDInWord) -> Self {
+    pub fn new(tld: &goodomain::TLDInWord) -> Self {
         let (start, end) = tld.index;
         Self {
             start,
             end,
-            tld: tld.tld.to_string(),
-            domain: tld.domain(word),
-            path: tld.path(word),
-            display: tld.display(word),
+            tld: tld.tld().to_string(),
+            domain: tld.domain(),
+            path: tld.path(),
+            display: format!("{}", tld),
         }
     }
 }
@@ -55,5 +55,5 @@ impl TLDInWord {
 #[wasm_bindgen]
 pub fn find(word: &str) -> Result<Vec<TLDInWord>, String> {
     let tlds = goodomain::find(word).map_err(|e| format!("{}", e))?;
-    Ok(tlds.map(|tld| TLDInWord::new(word, &tld)).collect())
+    Ok(tlds.map(|tld| TLDInWord::new(&tld)).collect())
 }
