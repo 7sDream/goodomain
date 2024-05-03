@@ -13,7 +13,7 @@ Source code in `web/app`.
 ### Install from source
 
 ```bash
-cargo build --path ./crates/goodomain-cli
+cargo install --path crates/goodomain-cli
 ```
 
 ### Usage
